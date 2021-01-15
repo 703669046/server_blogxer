@@ -64,7 +64,10 @@ Route::post('index/addPosts','index/post/save');
 Route::get('index/postlist','index/post/index');
 Route::any('index/postinfo/:id','index/post/read',['method'=>'get']);
 Route::post('index/postListPage','index/post/indexPage');
+Route::any('index/postItem/info/:id','index/post/postinfo',['method'=>'get']);
 
+Route::post('index/praise','index/praise/save');
+Route::post('index/collect','index/collect/save');
 
 
 

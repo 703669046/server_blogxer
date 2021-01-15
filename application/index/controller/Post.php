@@ -74,10 +74,41 @@ class Post extends BaseApi
         $data = \app\common\model\Post::alias('a')
             ->join('blogs_praise b','a.id=b.post_id','left')
             ->join('blogs_collect c','b.post_id=c.post_id','left')
-            ->field('a.*,b.praise,b.post_id,b.user_parise_id,b.user_id,c.collect,c.post_id,c.user_collect_id,c.user_id')
+            ->field('a.*,b.praise,c.collect')
             ->where($where)->paginate($params['pageSize']);
+        static $list = array();
+        foreach($data as $item){
+            $pieces = explode(",", $item['category']);
+            if(in_array($params['id'], $pieces)){
+                $list[]=$item;
+            }
+        }
+        $this->ok($list);
+    }
 
-        $this->ok($data);
+    public function postinfo($id)
+    {
+        $param = input();
+        $where['id']=$id;
+        $obj = \app\common\model\Post::where($where)->find();
+        $wheres['post_id']=$id;
+        $wheres['user_parise_id']=$param['user_id'];
+        $wheres['praise']=1;
+        $praise = \app\common\model\Praise::where($wheres)->find();
+        unset($wheres['user_parise_id']);
+        unset($wheres['praise']);
+        $wheres['user_collect_id']=$param['user_id'];
+        $wheres['collect']=1;
+        $collect = \app\common\model\Collect::where($wheres)->find();
+        unset($wheres['user_collect_id']);
+        $collects = \app\common\model\Collect::where($wheres)->count();
+        $add['browse']=$obj['browse']+1;
+        \app\common\model\Post::update($add,$where,true);
+        $obj['praise']=$praise['praise'];
+        $obj['collect']=$collect['collect'];
+        $obj['collects']=$collects;
+        $this->ok($obj);
+
     }
 
     /**
