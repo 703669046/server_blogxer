@@ -63,6 +63,7 @@ Route::post('index/addPosts','index/post/save');
 
 Route::get('index/postlist','index/post/index');
 Route::any('index/postinfo/:id','index/post/read',['method'=>'get']);
+Route::post('index/postListPage','index/post/indexPage');
 
 
 
@@ -85,6 +86,7 @@ Route::post('admin/addPosts','adminapi/post/save');
 
 Route::get('admin/postlist','adminapi/post/index');
 Route::any('admin/postinfo/:id','adminapi/post/read',['method'=>'get']);
+
 Route::post('admin/approval','adminapi/post/approvalpost');
 
 

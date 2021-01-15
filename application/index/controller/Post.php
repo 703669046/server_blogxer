@@ -54,6 +54,32 @@ class Post extends BaseApi
         $this->ok();
     }
 
+    public function indexPage()
+    {
+        $params = input();
+        $validate = $this->validate($params, [
+            'user_id' => 'require',
+            'id|类别' => 'require',
+        ]);
+        if($validate !== true){
+            $this->fail($validate);
+        }
+        $where=[];
+        if(isset($params['title']) && !empty($params['title'])){
+            $keyword=$params['keyword'];
+            $where['title']=['like',"%$keyword%"];
+
+        }
+        $where['type']=3;
+        $data = \app\common\model\Post::alias('a')
+            ->join('blogs_praise b','a.id=b.post_id','left')
+            ->join('blogs_collect c','b.post_id=c.post_id','left')
+            ->field('a.*,b.praise,b.post_id,b.user_parise_id,b.user_id,c.collect,c.post_id,c.user_collect_id,c.user_id')
+            ->where($where)->paginate($params['pageSize']);
+
+        $this->ok($data);
+    }
+
     /**
      * 显示指定的资源
      *
