@@ -45,7 +45,7 @@ use think\Route;
 //    //商品模块（类型）接口
 //    Route::resource('types','adminapi/type',[],['id'=>'\d+']);
 //});
-
+//登录验证码
 Route::get('index/captcha','index/login/captcha');
 Route::get('index/captchas','index/user/captcha');
 Route::post('index/login','index/login/login');
@@ -66,8 +66,13 @@ Route::any('index/postinfo/:id','index/post/read',['method'=>'get']);
 Route::post('index/postListPage','index/post/indexPage');
 Route::any('index/postItem/info/:id','index/post/postinfo',['method'=>'get']);
 
+Route::post('index/search','index/post/searchs');
+
 Route::post('index/praise','index/praise/save');
 Route::post('index/collect','index/collect/save');
+
+
+
 
 
 

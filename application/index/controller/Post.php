@@ -41,10 +41,9 @@ class Post extends BaseApi
         $params = input();
         //参数检测
         $validate = $this->validate($params, [
-            'title|标题' => 'require|length:2,20',
+            'title|标题' => 'require|length:2,60',
             'source|来源' => 'require',
             'category|类别' => 'require',
-            'icon_src|图标' => 'require',
             'context|内容' =>'require',
         ]);
         if($validate !== true){
@@ -76,6 +75,32 @@ class Post extends BaseApi
             ->join('blogs_collect c','b.post_id=c.post_id','left')
             ->field('a.*,b.praise,c.collect')
             ->where($where)->paginate($params['pageSize']);
+        static $list = array();
+        foreach($data as $item){
+            $pieces = explode(",", $item['category']);
+            if(in_array($params['id'], $pieces)){
+                $list[]=$item;
+            }
+        }
+        $this->ok($list);
+    }
+
+    public function searchs()
+    {
+        $params = input();
+        $where=[];
+        if(isset($params['title']) && !empty($params['title'])){
+            $keyword=$params['keyword'];
+            $where['title']=['like',"%$keyword%"];
+
+        }
+        $where['type']=3;
+        $data = \app\common\model\Post::alias('a')
+            ->join('blogs_praise b','a.id=b.post_id','left')
+            ->join('blogs_collect c','b.post_id=c.post_id','left')
+            ->join('blogs_auth d','a.category_title=d.auth_name','left')
+            ->field('a.id,a.title,a.category_title,b.praise,c.collect,d.path')
+            ->where($where)->select();
         static $list = array();
         foreach($data as $item){
             $pieces = explode(",", $item['category']);
