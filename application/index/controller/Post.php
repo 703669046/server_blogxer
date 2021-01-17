@@ -89,10 +89,14 @@ class Post extends BaseApi
     {
         $params = input();
         $where=[];
+        $data=[];
         if(isset($params['title']) && !empty($params['title'])){
-            $keyword=$params['keyword'];
+            $keyword=$params['title'];
             $where['title']=['like',"%$keyword%"];
 
+        }else{
+            $this->ok($data);
+            return;
         }
         $where['type']=3;
         $data = \app\common\model\Post::alias('a')
@@ -102,13 +106,13 @@ class Post extends BaseApi
             ->field('a.id,a.title,a.category_title,b.praise,c.collect,d.path')
             ->where($where)->select();
         static $list = array();
-        foreach($data as $item){
-            $pieces = explode(",", $item['category']);
-            if(in_array($params['id'], $pieces)){
-                $list[]=$item;
-            }
-        }
-        $this->ok($list);
+//        foreach($data as $item){
+//            $pieces = explode(",", $item['category_title']);
+//            if(in_array($params['id'], $pieces)){
+//                $list[]=$item;
+//            }
+//        }
+        $this->ok($data);
     }
 
     public function postinfo($id)
@@ -117,6 +121,7 @@ class Post extends BaseApi
         $where['id']=$id;
         $obj = \app\common\model\Post::where($where)->find();
         $wheres['post_id']=$id;
+        $praises = \app\common\model\Praise::where($wheres)->count();
         $wheres['user_parise_id']=$param['user_id'];
         $wheres['praise']=1;
         $praise = \app\common\model\Praise::where($wheres)->find();
@@ -130,6 +135,7 @@ class Post extends BaseApi
         $add['browse']=$obj['browse']+1;
         \app\common\model\Post::update($add,$where,true);
         $obj['praise']=$praise['praise'];
+        $obj['praises']=$praises;
         $obj['collect']=$collect['collect'];
         $obj['collects']=$collects;
         $this->ok($obj);

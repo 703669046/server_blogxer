@@ -50,27 +50,46 @@ Route::get('index/captcha','index/login/captcha');
 Route::get('index/captchas','index/user/captcha');
 Route::post('index/login','index/login/login');
 Route::post('index/register','index/user/save');
+//用户详情信息
 Route::post('index/userinfo','index/user/index');
+//用户修改信息
 Route::post('index/userinfo/update','index/user/edit');
+//退出登录
 Route::get('index/logout','index/login/logout');
+//获取token
 Route::post('index/tokens','index/user/index');
+//新增菜单
 Route::post('index/addmeuns','index/auth/save');
+//菜单列表
 Route::get('index/meunslist','index/auth/nav');
+//修改菜单
 Route::post('index/updatemeuns','index/auth/update');
+//删除菜单
 Route::post('index/deletemeuns','index/auth/delete');
+//文件上传
 Route::post('index/uploadfile','index/upload/logo');
+//帖子新增
 Route::post('index/addPosts','index/post/save');
 
 Route::get('index/postlist','index/post/index');
+
 Route::any('index/postinfo/:id','index/post/read',['method'=>'get']);
+//帖子分页查询
 Route::post('index/postListPage','index/post/indexPage');
+//帖子详情
 Route::any('index/postItem/info/:id','index/post/postinfo',['method'=>'get']);
-
+//搜索
 Route::post('index/search','index/post/searchs');
-
+//帖子点赞
 Route::post('index/praise','index/praise/save');
+//帖子收藏
 Route::post('index/collect','index/collect/save');
-
+//帖子评论
+Route::post('index/add/comment','index/comment/save');
+//获取帖子评论
+Route::post('index/get/commentList','index/comment/index');
+//查询我的评论
+Route::get('index/get/mycommentList','index/comment/mycomment');
 
 
 
