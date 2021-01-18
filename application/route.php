@@ -71,7 +71,7 @@ Route::post('index/uploadfile','index/upload/logo');
 //帖子新增
 Route::post('index/addPosts','index/post/save');
 
-Route::get('index/postlist','index/post/index');
+//Route::get('index/postlist','index/post/index');
 
 Route::any('index/postinfo/:id','index/post/read',['method'=>'get']);
 //帖子分页查询
@@ -90,6 +90,12 @@ Route::post('index/add/comment','index/comment/save');
 Route::post('index/get/commentList','index/comment/index');
 //查询我的评论
 Route::get('index/get/mycommentList','index/comment/mycomment');
+//查询我的点赞过的帖子
+Route::get('index/get/my_praise_list','index/praise/index');
+//查询我的收藏过的帖子
+Route::get('index/get/my_collect_list','index/collect/index');
+//查询我发布的帖子
+Route::get('index/get/my_post_list','index/post/mypost');
 
 
 

@@ -15,6 +15,15 @@ class Praise extends BaseApi
     public function index()
     {
         //
+        $param = input();
+        $where['user_parise_id'] = $param['user_id'];
+        $where['praise'] = 1;
+        $list = \app\common\model\Praise::alias('a')
+            ->join('blogs_post b','a.post_id=b.id','left')
+            ->join('blogs_auth c','b.category_title=c.auth_name','left')
+            ->field('a.*,b.id,b.title,b.icon_src,b.publisher_icon,b.publisher_name,b.source,b.context,b.category_title,c.path')
+            ->where($where)->order('create_time','desc')->select();
+        $this->ok($list);
     }
 
     /**

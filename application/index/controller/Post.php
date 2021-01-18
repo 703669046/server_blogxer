@@ -19,6 +19,14 @@ class Post extends BaseApi
         $this->ok($list);
     }
 
+    public function mypost()
+    {
+        $param = input();
+        $where['publisher_id'] = $param['user_id'];
+        $data = \app\common\model\Post::where($where)->order('create_time','desc')->select();
+        $this->ok($data);
+    }
+
     /**
      * 显示创建资源表单页.
      *
@@ -82,6 +90,7 @@ class Post extends BaseApi
                 $list[]=$item;
             }
         }
+        $list=array_unique($list);
         $this->ok($list);
     }
 

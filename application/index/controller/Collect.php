@@ -15,6 +15,16 @@ class Collect extends BaseApi
     public function index()
     {
         //
+        //
+        $param = input();
+        $where['user_collect_id'] = $param['user_id'];
+        $where['collect'] = 1;
+        $list = \app\common\model\Collect::alias('a')
+            ->join('blogs_post b','a.post_id=b.id','left')
+            ->join('blogs_auth c','b.category_title=c.auth_name','left')
+            ->field('a.*,b.id,b.title,b.icon_src,b.publisher_icon,b.publisher_name,b.source,b.context,b.category_title,c.path')
+            ->where($where)->order('create_time','desc')->select();
+        $this->ok($list);
     }
 
     /**
