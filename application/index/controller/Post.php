@@ -78,20 +78,25 @@ class Post extends BaseApi
 
         }
         $where['type']=3;
+        $type_id=$params['id'];
         $data = \app\common\model\Post::alias('a')
             ->join('blogs_praise b','a.id=b.post_id','left')
             ->join('blogs_collect c','b.post_id=c.post_id','left')
             ->field('a.*,b.praise,c.collect')
-            ->where($where)->paginate($params['pageSize']);
-        static $list = array();
-        foreach($data as $item){
-            $pieces = explode(",", $item['category']);
-            if(in_array($params['id'], $pieces)){
-                $list[]=$item;
-            }
-        }
-        $list=array_unique($list);
-        $this->ok($list);
+            ->where($where)
+            ->where("find_in_set($type_id,category)")
+            ->order('create_time','desc')
+            ->Distinct(true)
+            ->paginate($params['pageSize']);
+//        static $list = array();
+//        foreach($data['data'] as $item){
+//            $pieces = explode(",", $item['category']);
+//            if(in_array($params['id'], $pieces)){
+//                $list[]=$item;
+//            }
+//        }
+
+        $this->ok($data);
     }
 
     public function searchs()

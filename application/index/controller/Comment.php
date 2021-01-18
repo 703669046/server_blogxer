@@ -123,4 +123,17 @@ class Comment extends BaseApi
             ->where($where)->select();
         $this->ok($list);
     }
+
+    public function  getcomment ()
+    {
+        $param = input();
+        $userId = $param['user_id'];
+        $list = \app\common\model\Comment::alias('a')
+            ->join('blogs_post b',"a.post_id=b.id",'left')
+            ->join('blogs_user c','a.comment_user_id=c.id','left')
+            ->join('blogs_auth d','b.category_title=d.auth_name','left')
+            ->field('a.*,b.title,b.title,b.icon_src,b.publisher_icon,b.publisher_name,b.source,b.context,b.category_title,c.id as user_ids,c.nickname,d.path')
+            ->where('comment_user_id','<>',$userId)->select();
+        $this->ok($list);
+    }
 }

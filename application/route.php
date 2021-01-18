@@ -96,6 +96,8 @@ Route::get('index/get/my_praise_list','index/praise/index');
 Route::get('index/get/my_collect_list','index/collect/index');
 //查询我发布的帖子
 Route::get('index/get/my_post_list','index/post/mypost');
+//查询别人评价我的帖子
+Route::get('index/get/my_Comment_list','index/comment/getcomment');
 
 
 
